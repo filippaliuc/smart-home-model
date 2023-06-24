@@ -9,9 +9,9 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = torch.load("model.pth")
 model.to(device)
 
-def RandomImagePrediction(filepath):
+def PetImagePrediction(filepath):
     # Deschide și convertește imaginile în format RGB
-    img_array = Image.open(filepath).convert("RGB")
+    image_array = Image.open(filepath).convert("RGB")
     
     # Definirea transformărilor care vor fi aplicate asupra imaginilor
     data_transforms = transforms.Compose([
@@ -21,10 +21,10 @@ def RandomImagePrediction(filepath):
     ])
     
     # Aplică transformările asupra imaginilor 
-    img = data_transforms(img_array).unsqueeze(dim=0)
+    image = data_transforms(image_array).unsqueeze(dim=0)
     
     # Creează un loader de date pentru imaginile transformate
-    load = DataLoader(img)
+    load = DataLoader(image)
     
     for x in load:
         # Mută datele pe dispozitiv (GPU dacă este disponibil)
@@ -53,7 +53,7 @@ while True:
 
             if compute.val():
                 # Realizează predicția imaginii
-                response = RandomImagePrediction("pet_image.jpeg") # imagine cu câine
+                response = PetImagePrediction("pet_image.jpeg") # imagine cu câine
                 print(response)
 
                 # Actualizează baza de date cu clasificarea
