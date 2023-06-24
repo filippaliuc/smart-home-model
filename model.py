@@ -10,20 +10,20 @@ model = torch.load("model.pth")
 model.to(device)
 
 def PetImagePrediction(filepath):
-    # Deschide și convertește imaginile în format RGB
+    # Deschide și convertește imaginea din filepath în format RGB
     image_array = Image.open(filepath).convert("RGB")
     
-    # Definirea transformărilor care vor fi aplicate asupra imaginilor
+    # Definirea transformărilor care vor fi aplicate asupra imaginii
     data_transforms = transforms.Compose([
         transforms.Resize((224, 224)), 
         transforms.ToTensor(), 
         transforms.Normalize([0.5]*3, [0.5]*3)
     ])
     
-    # Aplică transformările asupra imaginilor 
+    # Aplică transformările asupra imaginii 
     image = data_transforms(image_array).unsqueeze(dim=0)
     
-    # Creează un loader de date pentru imaginile transformate
+    # Creează un loader de date pentru imaginea transformată
     load = DataLoader(image)
     
     for x in load:
@@ -53,14 +53,16 @@ while True:
 
             if compute.val():
                 # Realizează predicția imaginii
-                response = PetImagePrediction("pet_image.jpeg") # imagine cu câine
+                response = PetImagePrediction("pet_image.jpeg") 
                 print(response)
 
                 # Actualizează baza de date cu clasificarea
                 database.child("predictie").child("tip").set(response)
 
+                # Șterge imaginea locală 
                 os.remove(image_path)
             else:
+                # Nu se produce nicio predicție
                 response = ""
                 database.child("predictie").child("tip").set(response)
 
